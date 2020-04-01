@@ -1,6 +1,24 @@
 #:kivy 1.0.9
 
-<BluetoothButton>:   
+ScreenManager:
+    id: screen_manager
+    canvas.before:
+        Color:
+            rgba: 250.0/255, 138.0/255, 150.0/255, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    #transition: FadeTransition()
+    HomeScreen:
+        id: home_screen
+        name: 'home'
+        manager: 'screen_manager'
+    TestScreen:
+        id: test_screen
+        name: 'test'
+        manager: 'screen_manager'
+    
+#<BluetoothButton>:   
     # canvas:
     #     Rectangle:
     #         pos: self.center_x - 5, 0
@@ -18,15 +36,38 @@
     #     center_x: root.width * 3 / 4
     #     top: root.top - 50
     #     text: "0"
-            
+
+
+<SerialButton>:
+    Button:
+        id: button
+        pos: 300, 250
+        size: 200, 35
+        text:"Connect to Serial Port"
+        on_press:
+            root.connectSerial()
+            root.turnOn()
+            app.root.current = 'test'
+
+
+
 <TestScreen>:
-    BoxLayout:
+    FloatLayout:
         Button:
             text: 'Start Test'
+            background_color: 1, 131.0/255, 164.0/255, 0.5
+            pos_hint: {"x":0, "top":1} 
+            size_hint: 0.3, 0.3
+            # on_press:
         Button:
             text: 'Back to home'
-            on_press: root.manager.current = 'home'
+            on_press: app.root.current = 'home'
+            background_color: 1, 131.0/255, 164.0/255, 0.7
+            pos_hint: {"x":0.7, "top":0.1} 
+            size_hint: 0.2, 0.1
 
 <HomeScreen>:
-    # BoxLayout:
-    #     Button: BluetoothButton()
+    BoxLayout:
+        SerialButton:
+            
+        
