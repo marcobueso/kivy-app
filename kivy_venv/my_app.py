@@ -20,32 +20,120 @@ import serial
 from kivy.lang import Builder
 
 
-class TestScreen(Screen):
-    # def __init__(self, **kwargs):
-    #     self.box = BoxLayout()
-    #     self.i = 0
-    #     self.line = [self.i]
-    #     self.box.add_widget(canvas)
-    #     #plt.show()
-    #     Clock.schedule_interval(self.update, 0.1)
-    #     self.add_widget(canvas)
+from kivy.garden.matplotlib.backend_kivyagg import FigureCanvas
+from kivy.garden.matplotlib import FigureCanvasKivyAgg
 
-    # def update(self, *args):
-    #     plt.plot(self.line, self.line)
-    #     self.i += 1
-    #     self.line.append(self.i)
-    #     canvas.draw_idle()
-    
+class TestScreen(Screen):
     pass
 
 class HomeScreen(Screen):
     pass
-    # def __init__(self, **kwargs):
-    #     super(HomeScreen, self).__init__(**kwargs)
-    #     #self.BTbutton = BluetoothButton()
-    #     #self.add_widget(self.BTbutton)
-    #     self.SButton = SerialButton()
-    #     self.add_widget(self.SButton)
+
+fig, ax = plt.subplots()
+canvas = fig.canvas
+
+
+#############################################################################################
+
+def enter_axes(event):
+    print('enter_axes', event.inaxes)
+    event.inaxes.patch.set_facecolor('yellow')
+    event.canvas.draw()
+
+def leave_axes(event):
+    print('leave_axes', event.inaxes)
+    event.inaxes.patch.set_facecolor('white')
+    event.canvas.draw()
+
+def enter_figure(event):
+    print('enter_figure', event.canvas.figure)
+    event.canvas.figure.patch.set_facecolor('red')
+    event.canvas.draw()
+
+def leave_figure(event):
+    print('leave_figure', event.canvas.figure)
+    event.canvas.figure.patch.set_facecolor('grey')
+    event.canvas.draw()
+
+
+class Test(BoxLayout):
+    def __init__(self, *args, **kwargs):
+        super(Test, self).__init__(*args, **kwargs)
+        self.add_plot()
+
+    def get_fc(self, i):
+        fig1 = plt.figure()
+        fig1.suptitle('mouse hover over figure or axes to trigger events' +
+                      str(i))
+        ax1 = fig1.add_subplot(211)
+        ax2 = fig1.add_subplot(212)
+        wid = FigureCanvas(fig1)
+        fig1.canvas.mpl_connect('figure_enter_event', enter_figure)
+        fig1.canvas.mpl_connect('figure_leave_event', leave_figure)
+        fig1.canvas.mpl_connect('axes_enter_event', enter_axes)
+        fig1.canvas.mpl_connect('axes_leave_event', leave_axes)
+        return wid
+
+    def add_plot(self):
+        btn = Button()
+        self.add_widget(btn)
+        self.add_widget(self.get_fc(1))
+#############################################################################################
+
+
+
+
+class ActiveTestScreen(Screen):
+    def on_enter(self, *args):
+        box = BoxLayout()
+        box.size_hint = 0.95, 0.7
+        box.pos_hint = {"x":0.025, "top":0.9} 
+        box.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        self.add_widget(box)
+
+    def startTest(self):
+        self.box = BoxLayout()
+        fig1 = plt.figure()
+        fig1.suptitle('mouse hover over figure or axes to trigger events')
+        ax1 = fig1.add_subplot(211)
+        ax2 = fig1.add_subplot(212)
+        wid = FigureCanvas(fig1)
+        fig1.canvas.mpl_connect('figure_enter_event', enter_figure)
+        fig1.canvas.mpl_connect('figure_leave_event', leave_figure)
+        fig1.canvas.mpl_connect('axes_enter_event', enter_axes)
+        fig1.canvas.mpl_connect('axes_leave_event', leave_axes)
+        self.box.add_widget(wid)
+        # self.i = 0
+        # self.line = [self.i]
+        # self.add_widget(canvas)
+        # #plt.show()
+        # Clock.schedule_interval(self.update, 1)
+        #self.add_plot()
+
+    def update(self, *args):
+        plt.plot(self.line, self.line)
+        self.i += 1
+        self.line.append(self.i)
+        canvas.draw_idle()
+    
+    def get_fc(self, i):
+        fig1 = plt.figure()
+        fig1.suptitle('mouse hover over figure or axes to trigger events' +
+                      str(i))
+        ax1 = fig1.add_subplot(211)
+        ax2 = fig1.add_subplot(212)
+        wid = FigureCanvas(fig1)
+        fig1.canvas.mpl_connect('figure_enter_event', enter_figure)
+        fig1.canvas.mpl_connect('figure_leave_event', leave_figure)
+        fig1.canvas.mpl_connect('axes_enter_event', enter_axes)
+        fig1.canvas.mpl_connect('axes_leave_event', leave_axes)
+        return wid
+
+    def add_plot(self):
+        self.add_widget(self.get_fc(1))
+        self.add_widget(self.get_fc(2))
+
+    pass
 
 class BluetoothButton(Widget):
     def __init__(self, **kwargs): 
@@ -126,44 +214,18 @@ class Sensor(Widget):
 
 
 
-fig, ax = plt.subplots()
-canvas = fig.canvas
-
-# Create the screen manager
-sm = ScreenManager()
-# Create n screens --TODO: right now we will only have 2: "home", and "start test" pages
-sm.add_widget(HomeScreen(name = "home"))
-sm.add_widget(TestScreen(name = "test"))
-
+# fig, ax = plt.subplots()
+# canvas = fig.canvas
 
 buildKV = Builder.load_file("my.kv")
 
 
+### MAIN APP ###
 class MyApp(App):
-
     def build(self):
-        # simple inquiry example
-        
-        #btn = BluetoothButton()
-        #return Label(text = devices_list)
-        #return Label(text='Hello world')
-        #box = BoxLayout()
-        # self.i = 0
-        # self.line = [self.i]
-        #box.add_widget(canvas)
-        #box.add_widget(btn)
-        # #plt.show()
-        # Clock.schedule_interval(self.update, 0.1)
-        # return box
-
         return buildKV
-        #sm# -- TODO
 
 
-        
-
-
-
-
+### RUN ###
 if __name__ == '__main__':
     MyApp().run()

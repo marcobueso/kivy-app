@@ -1,4 +1,6 @@
 #:kivy 1.0.9
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
 
 ScreenManager:
     id: screen_manager
@@ -16,6 +18,10 @@ ScreenManager:
     TestScreen:
         id: test_screen
         name: 'test'
+        manager: 'screen_manager'
+    ActiveTestScreen:
+        id: active_test_screen
+        name: 'active_test'
         manager: 'screen_manager'
     
 #<BluetoothButton>:   
@@ -47,6 +53,7 @@ ScreenManager:
         on_press:
             root.connectSerial()
             root.turnOn()
+            app.root.transition.direction = 'left'
             app.root.current = 'test'
 
 
@@ -56,17 +63,93 @@ ScreenManager:
         Button:
             text: 'Start Test'
             background_color: 1, 131.0/255, 164.0/255, 0.5
-            pos_hint: {"x":0, "top":1} 
-            size_hint: 0.3, 0.3
-            # on_press:
+            pos_hint: {"x":0.4, "top":0.2} 
+            size_hint: 0.25, 0.2
+            on_press:
+                app.root.transition = NoTransition()
+                app.root.current = 'active_test'
+                app.root.transition = SlideTransition()
+                #root.startTest()
         Button:
             text: 'Back to home'
-            on_press: app.root.current = 'home'
             background_color: 1, 131.0/255, 164.0/255, 0.7
             pos_hint: {"x":0.7, "top":0.1} 
             size_hint: 0.2, 0.1
+            on_press:
+                app.root.transition.direction = 'right'
+                app.root.current = 'home'
+        # BoxLayout:
+        # id: box
+        #     orientation: 'vertical'
+        #     pos_hint: {"x":0.5, "top":0.95} 
+        #     size_hint: 0.6, 0.6
+            
+<ActiveTestScreen>:
+    #on_enter: root.startTest()
+    # FloatLayout:
+    #     Button:
+    #         text: 'Stop Test'
+    #         background_color: 1, 131.0/255, 164.0/255, 0.1
+    #         pos_hint: {"x":0.4, "top":0.2} 
+    #         size_hint: 0.25, 0.2
+    #         on_press:
+    #             app.root.transition = NoTransition()
+    #             app.root.current = 'test'
+    #             app.root.transition = SlideTransition()
+    #     Button:
+    #         text: 'Back to home'
+    #         background_color: 1, 131.0/255, 164.0/255, 0.7
+    #         pos_hint: {"x":0.7, "top":0.1} 
+    #         size_hint: 0.2, 0.1
+    #         on_press:
+    #             app.root.transition.direction = 'right'
+    #             app.root.current = 'home'
+    BoxLayout:
+        canvas:
+            Color:
+                rgb: 250.0/255, 150.0/255, 128.0/255
+            Rectangle:
+                size: self.size
+        name: 'box'
+        #orientation: 'vertical'
+        #pos_hint: {"x":0.05, "top":0.95} 
+        #size_hint: 0.8, 0.6
+        Button:
+            text: 'Stop Test from BOX'
+            background_color: 1, 131.0/255, 164.0/255, 0.1
+            pos_hint: {"x":0.4, "top":0.2} 
+            size_hint: 0.2, 0.2
+            on_press:
+                print("Hello world")
+                app.root.transition = NoTransition()
+                app.root.current = 'test'
+                app.root.transition = SlideTransition()
+        Button:
+            text: 'Back to home'
+            background_color: 1, 131.0/255, 164.0/255, 0.7
+            pos_hint: {"x":0.7, "top":0.1} 
+            size_hint: 0.2, 0.1
+            on_press:
+                app.root.transition.direction = 'right'
+                app.root.current = 'home'
+        
+
+
+
+<Test>:
+    orientation: 'vertical'
+    Button:
+        size_hint_y: None
+        height: 40
+        on_press: print("Hello world")
+
 
 <HomeScreen>:
+    Label:
+        id: "title_label"
+        text: "Polka Dot Health"
+        pos: 0, 150
+        font_size: "30sp"
     BoxLayout:
         SerialButton:
             
