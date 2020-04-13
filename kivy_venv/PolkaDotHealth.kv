@@ -8,7 +8,7 @@ ScreenManager:
     id: screen_manager
     canvas.before:
         Color:
-            rgba: 250.0/255, 138.0/255, 150.0/255, 1
+            rgba: 255.0/255, 138.0/255, 150.0/255, 1
         Rectangle:
             pos: self.pos
             size: self.size
@@ -24,20 +24,32 @@ ScreenManager:
         id: active_test_screen
         name: 'active_test'
         manager: 'screen_manager'
+    FinishedTestScreen:
+        id: finished_test_screen
+        name: 'finished'
+        manager: 'screen_manager'    
+    ClinicsScreen:
+        id: nearby_clinics_screen
+        name: 'clinics'
+        manager: 'screen_manager'
 
 # Home screen and "Connect Serial" button
 <HomeScreen>:
     Label:
         id: "title_label"
         text: "Polka Dot Health"
-        pos: 0, 150
+        pos: 0, 190
         font_size: "30sp"
+    Image:
+        source: 'logo.png'
+        size: self.texture_size
+        pos_hint: {"x":0.01, "top":1} 
     BoxLayout:
         SerialButton:
 <SerialButton>:
     Button:
         id: button
-        pos: 300, 250
+        pos: 300, 100
         size: 200, 35
         text:"Connect to Serial Port"
         on_press:
@@ -49,11 +61,15 @@ ScreenManager:
 # Test Screen before entering active test
 <TestScreen>:
     FloatLayout:
+        Image:
+            source: 'logo.png'
+            size: self.texture_size
+            pos_hint: {"x":0.01, "top":1} 
         Button:
             text: 'Start Test'
             background_color: 1, 131.0/255, 164.0/255, 0.5
-            pos_hint: {"x":0.4, "top":0.2} 
-            size_hint: 0.25, 0.2
+            pos_hint: {"x":0.2, "top":0.2} 
+            size_hint: 0.2, 0.1
             on_press:
                 app.root.transition = NoTransition()
                 app.root.current = 'active_test'
@@ -61,12 +77,19 @@ ScreenManager:
         Button:
             text: 'Back to home'
             background_color: 1, 131.0/255, 164.0/255, 0.7
-            pos_hint: {"x":0.7, "top":0.1} 
+            pos_hint: {"x":0.45, "top":0.2} 
             size_hint: 0.2, 0.1
             on_press:
                 app.root.transition.direction = 'right'
                 app.root.current = 'home'
-
+        Button:
+            text: 'Nearby Clinics'
+            background_color: 1, 131.0/255, 164.0/255, 0.7
+            pos_hint: {"x":0.75, "top":0.2} 
+            size_hint: 0.2, 0.1
+            on_press:
+                app.root.transition.direction = 'left'
+                app.root.current = 'clinics'
 # Active Test Screen
 # Test simulation
 <ActiveTestScreen>:
@@ -83,8 +106,9 @@ ScreenManager:
             pos_hint: {"x":0.4, "top":0.2} 
             size_hint: 0.2, 0.2
             on_press:
-                app.root.transition = NoTransition()
-                app.root.current = 'test'
+                root.stopTest()
+                app.root.transition = SlideTransition()
+                app.root.current = 'finished'
                 app.root.transition = SlideTransition()
         Button:
             text: 'Back to home'
@@ -94,3 +118,68 @@ ScreenManager:
             on_press:
                 app.root.transition.direction = 'right'
                 app.root.current = 'home'
+
+
+
+# Nearby Clinics Screen
+<ClinicsScreen>:
+    FloatLayout:
+        canvas:
+            Color:
+                rgba: 230.0/255, 131.0/255, 150.0/255, 0.6
+            Rectangle:
+                size: 600, 115
+                pos: 90, 70
+
+        Image:
+            source: 'map.png'
+            #size: self.texture_size
+            size_hint: 0.94, 0.55
+            pos_hint: {"x":0.02, "top":0.90} 
+        Button:
+            text: 'Back to home'
+            background_color: 1, 131.0/255, 164.0/255, 0.7
+            pos_hint: {"x":0.75, "top":0.1} 
+            size_hint: 0.2, 0.1
+            on_press:
+                app.root.transition.direction = 'right'
+                app.root.current = 'test'
+        Label:
+            id: "clinics_label"
+            text: "Nearby Clinics"
+            pos_hint: {"x":0.4, "top":0.97} 
+            size_hint: 0.2, 0.03
+            font_size: "30sp"
+        Label:
+            id: "example_clinic_name_label"
+            color: 0, 0, 1, 1
+            text: '[Example Clinic]'
+            pos_hint: {"x":0.12, "top":0.30} 
+            size_hint: 0.2, 0.03
+            font_size: "18sp"
+        Label:
+            id: "example_clinic_address_label"
+            #color: 0, 0, 1, 1
+            text: 'Address Line 123 \nCollege Station, TX 77840\n(979) 555-5555'
+            pos_hint: {"x":0.16, "top":0.23} 
+            size_hint: 0.2, 0.03
+            font_size: "16sp"
+        
+# Finished Test Screen
+<FinishedTestScreen>:
+    BoxLayout:
+        Label:
+            id: "title_label"
+            text: "Summary"
+            pos_hint: {"x":0.6, "top":0.95} 
+            font_size: "30sp"
+        Button:
+            text: 'Back to home'
+            background_color: 1, 131.0/255, 164.0/255, 0.7
+            pos_hint: {"x":0.7, "top":0.1} 
+            size_hint: 0.2, 0.1
+            on_press:
+                app.root.transition.direction = 'right'
+                app.root.current = 'home'
+        
+    
