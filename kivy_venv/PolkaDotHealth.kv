@@ -58,9 +58,10 @@ ScreenManager:
     Label:
         id: "text_bra_label"
         markup: True
-        text: '[color=ab9a9a]Disconnected[/color]'
+        text: '[color=8f8686]Disconnected[/color]'
         pos: 0, -120
         font_size: "37sp"
+        color: 
     Image:
         source: 'new_logo.png'
         size: self.texture_size
@@ -101,13 +102,18 @@ ScreenManager:
             source: 'icon_bra2.png'
             size: self.texture_size
             size_hint: 0.4, 0.4
-            pos_hint: {"x":0.035, "top":0.60} 
+            pos_hint: {"x":0.03, "top":0.85} 
+        Label:
+            id: "title_label"
+            text: "Connected"
+            pos: 60, 100
+            font_size: "37sp"
         Button:
             text: 'Start Test'
             font_size: "20sp"
             background_normal: ''
             background_color: [1,64/255,83/255,1]
-            pos_hint: {"x":0.3, "top":0.7} 
+            pos_hint: {"x":0.3, "top":0.4} 
             size_hint: 0.4, 0.1
             on_press:
                 app.root.transition = NoTransition()
