@@ -9,7 +9,8 @@ from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button 
-from kivy.uix.video import Video
+from kivy.uix.video import Video #remove
+from kivy.uix.videoplayer import VideoPlayer
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.graphics import Color, Rectangle
@@ -64,7 +65,8 @@ class TestScreen(Screen):
 
 class HowToScreen(Screen):
     def on_enter(self, *args):
-        video = Video(source='Polka_Dot_App_demo.avi', play=True)
+        video = VideoPlayer(source='Polka_Dot_App_demo.avi', state='play')
+        self.add_widget(video)
     pass
 
 class ClinicsScreen(Screen):

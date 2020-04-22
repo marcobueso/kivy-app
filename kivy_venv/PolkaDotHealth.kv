@@ -102,7 +102,16 @@ ScreenManager:
 
 # How-To Video Screen
 <HowToScreen>:
-
+    Button:
+        text: 'Back'
+        font_size: "18sp"
+        background_normal: ''
+        background_color: [1,64/255,83/255,1]
+        pos_hint: {"x":0.02, "top":0.98} 
+        size_hint: 0.2, 0.1
+        on_press:
+            app.root.transition.direction = 'right'
+            app.root.current = 'home'
 
 # Test Screen before entering active test
 <TestScreen>:
