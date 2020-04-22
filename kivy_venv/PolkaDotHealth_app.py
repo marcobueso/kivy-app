@@ -1,5 +1,9 @@
 import kivy
 kivy.require('1.0.6')
+# Set window size
+from kivy.config import Config
+Config.set('graphics', 'width', '430')
+Config.set('graphics', 'height', '700')
 
 from kivy.app import App
 from kivy.uix.label import Label

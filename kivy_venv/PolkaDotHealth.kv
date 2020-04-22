@@ -37,21 +37,40 @@ ScreenManager:
 <HomeScreen>:
     Label:
         id: "title_label"
-        text: "Polka Dot Health"
-        pos: 0, 190
+        text: "Welcome!\n"
+        pos: -45, 158
         font_size: "30sp"
+    Label:
+        id: "text2_label"
+        text: "April 21st, 2020\n"
+        pos: -45, 128
+        font_size: "20sp"
     Image:
-        source: 'logo.png'
+        source: 'user.png'
+        size_hint: 0.15, 0.15
+        pos_hint: {"x":0.035, "top":0.80} 
+    Image:
+        source: 'icon_bra_gray.png'
         size: self.texture_size
-        pos_hint: {"x":0.01, "top":1} 
+        size_hint: 0.4, 0.4
+        pos_hint: {"x":0.035, "top":0.75} 
+    Image:
+        source: 'new_logo.png'
+        size: self.texture_size
+        size_hint: 0.7, 0.2
+        pos_hint: {"x":0.15, "top":1} 
     BoxLayout:
         SerialButton:
+            
+            
 <SerialButton>:
     Button:
         id: button
-        pos: 300, 100
-        size: 200, 35
-        text:"Connect to Serial Port"
+        pos: 430/2 - 190/2, 700/8
+        size: 190, 50
+        background_normal: ''
+        background_color: [1,64/255,83/255,1]
+        text:"Connect to Bra\n  (Serial Port)"
         on_press:
             root.connectSerial()
             root.turnOn()
@@ -62,14 +81,26 @@ ScreenManager:
 <TestScreen>:
     FloatLayout:
         Image:
-            source: 'logo.png'
+            source: 'new_logo.png'
             size: self.texture_size
-            pos_hint: {"x":0.01, "top":1} 
+            size_hint: 0.7 * 0.85 , 0.2 * 0.85
+            pos_hint: {"x":0.3, "top":1} 
+        Image:
+            source: 'user.png'
+            size_hint: 0.15, 0.15
+            pos_hint: {"x":0.035, "top":1} 
+        Image:
+            source: 'icon_bra2.png'
+            size: self.texture_size
+            size_hint: 0.4, 0.4
+            pos_hint: {"x":0.035, "top":0.60} 
         Button:
             text: 'Start Test'
-            background_color: 1, 131.0/255, 164.0/255, 0.5
-            pos_hint: {"x":0.2, "top":0.2} 
-            size_hint: 0.2, 0.1
+            font_size: "20sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.3, "top":0.7} 
+            size_hint: 0.4, 0.1
             on_press:
                 app.root.transition = NoTransition()
                 app.root.current = 'active_test'
