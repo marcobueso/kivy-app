@@ -16,6 +16,10 @@ ScreenManager:
         id: home_screen
         name: 'home'
         manager: 'screen_manager'
+    HowToScreen:
+        id: howto_screen
+        name: 'howto'
+        manager: 'screen_manager'
     TestScreen:
         id: test_screen
         name: 'test'
@@ -66,7 +70,17 @@ ScreenManager:
         source: 'new_logo.png'
         size: self.texture_size
         size_hint: 0.7, 0.2
-        pos_hint: {"x":0.15, "top":1} 
+        pos_hint: {"x":0.15, "top":1}
+    Button:
+        text: 'How-To'
+        font_size: "20sp"
+        background_normal: ''
+        background_color: [1,64/255,83/255,1]
+        pos_hint: {"x":0.3, "top":0.17} 
+        size_hint: 0.4, 0.1
+        on_press:
+            app.root.transition.direction = 'left'
+            app.root.current = 'howto'
     BoxLayout:
         SerialButton:
             
@@ -74,8 +88,8 @@ ScreenManager:
 <SerialButton>:
     Button:
         id: button
-        pos: 430/2 - 200/2, 700/8
-        size: 200, 55
+        pos: 430/2 - 430*0.4/2 , 700*0.19
+        size: 430*0.4, 700*0.1
         background_normal: ''
         background_color: [1,64/255,83/255,1]
         text:"Connect to Bra\n  (Serial Port)"
@@ -85,6 +99,10 @@ ScreenManager:
             root.turnOn()
             app.root.transition.direction = 'left'
             app.root.current = 'test'
+
+# How-To Video Screen
+<HowToScreen>:
+
 
 # Test Screen before entering active test
 <TestScreen>:
@@ -104,37 +122,54 @@ ScreenManager:
             size_hint: 0.4, 0.4
             pos_hint: {"x":0.03, "top":0.85} 
         Label:
-            id: "title_label"
+            id: "connected_label"
             text: "Connected"
             pos: 60, 100
             font_size: "37sp"
+        Label:
+            id: "connected2_label"
+            text: "B01-001"
+            pos: 30, 70
+            font_size: "30sp"
         Button:
             text: 'Start Test'
             font_size: "20sp"
             background_normal: ''
             background_color: [1,64/255,83/255,1]
-            pos_hint: {"x":0.3, "top":0.4} 
+            pos_hint: {"x":0.3, "top":0.5} 
             size_hint: 0.4, 0.1
             on_press:
                 app.root.transition = NoTransition()
                 app.root.current = 'active_test'
                 app.root.transition = SlideTransition()
         Button:
-            text: 'Back to home'
-            background_color: 1, 131.0/255, 164.0/255, 0.7
-            pos_hint: {"x":0.45, "top":0.2} 
+            text: 'Nearby Clinics'
+            font_size: "20sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.3, "top":0.38} 
+            size_hint: 0.4, 0.1
+            on_press:
+                app.root.transition.direction = 'left'
+                app.root.current = 'clinics'
+        Button:
+            text: 'My Journal'
+            font_size: "20sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.3, "top":0.26} 
+            size_hint: 0.4, 0.1
+        Button:
+            text: 'Back'
+            font_size: "18sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.78, "top":0.11} 
             size_hint: 0.2, 0.1
             on_press:
                 app.root.transition.direction = 'right'
                 app.root.current = 'home'
-        Button:
-            text: 'Nearby Clinics'
-            background_color: 1, 131.0/255, 164.0/255, 0.7
-            pos_hint: {"x":0.75, "top":0.2} 
-            size_hint: 0.2, 0.1
-            on_press:
-                app.root.transition.direction = 'left'
-                app.root.current = 'clinics'
+        
 # Active Test Screen
 # Test simulation
 <ActiveTestScreen>:
@@ -182,9 +217,11 @@ ScreenManager:
             size_hint: 0.94, 0.55
             pos_hint: {"x":0.02, "top":0.90} 
         Button:
-            text: 'Back to home'
-            background_color: 1, 131.0/255, 164.0/255, 0.7
-            pos_hint: {"x":0.75, "top":0.1} 
+            text: 'Back'
+            font_size: "18sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.78, "top":0.11} 
             size_hint: 0.2, 0.1
             on_press:
                 app.root.transition.direction = 'right'

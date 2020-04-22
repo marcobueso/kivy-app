@@ -9,9 +9,11 @@ from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button 
+from kivy.uix.video import Video
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.graphics import Color, Rectangle
+#from kivy.lib.gstplayer import GstPlayer
 
 import numpy as np
 import matplotlib
@@ -54,10 +56,15 @@ Arduino = serial.Serial('COM9', 9600, timeout=0.5)
 ###################################################
 ###################################################
 # SCREENS
+class HomeScreen(Screen):
+    pass
+
 class TestScreen(Screen):
     pass
 
-class HomeScreen(Screen):
+class HowToScreen(Screen):
+    def on_enter(self, *args):
+        video = Video(source='Polka_Dot_App_demo.avi', play=True)
     pass
 
 class ClinicsScreen(Screen):
