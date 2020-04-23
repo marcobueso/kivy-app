@@ -31,7 +31,15 @@ ScreenManager:
     FinishedTestScreen:
         id: finished_test_screen
         name: 'finished'
-        manager: 'screen_manager'    
+        manager: 'screen_manager'  
+    JournalScreen:
+        id: journal_screen
+        name: 'journal'
+        manager: 'screen_manager'  
+    FakeEntryScreen:
+        id: fake_entry_screen
+        name: 'fake_entry'
+        manager: 'screen_manager'
     ClinicsScreen:
         id: nearby_clinics_screen
         name: 'clinics'
@@ -62,7 +70,7 @@ ScreenManager:
     Label:
         id: "text_bra_label"
         markup: True
-        text: '[color=8f8686]Disconnected[/color]'
+        text: '[color=615c5b]Disconnected[/color]'
         pos: 0, -120
         font_size: "37sp"
         color: 
@@ -102,6 +110,16 @@ ScreenManager:
 
 # How-To Video Screen
 <HowToScreen>:
+    FloatLayout:
+        Image:
+            source: 'new_logo.png'
+            size: self.texture_size
+            size_hint: 0.7 * 0.85 , 0.2 * 0.85
+            pos_hint: {"x":0.3, "top":1} 
+        # Image:
+        #     source: 'user.png'
+        #     size_hint: 0.15, 0.15
+        #     pos_hint: {"x":0.035, "top":1} 
     Button:
         text: 'Back'
         font_size: "18sp"
@@ -168,6 +186,9 @@ ScreenManager:
             background_color: [1,64/255,83/255,1]
             pos_hint: {"x":0.3, "top":0.26} 
             size_hint: 0.4, 0.1
+            on_press:
+                app.root.transition.direction = 'left'
+                app.root.current = 'journal'
         Button:
             text: 'Back'
             font_size: "18sp"
@@ -182,31 +203,40 @@ ScreenManager:
 # Active Test Screen
 # Test simulation
 <ActiveTestScreen>:
-    BoxLayout:
-        canvas:
-            Color:
-                rgb: 250.0/255, 150.0/255, 128.0/255
-            Rectangle:
-                size: self.size
-        name: 'box'
+    FloatLayout:
+        Image:
+            source: 'new_logo.png'
+            size: self.texture_size
+            size_hint: 0.7 * 0.85 *0.66 , 0.2 * 0.85 *0.66
+            pos_hint: {"x":0.3, "top":1} 
+        Image:
+            source: 'user.png'
+            size_hint: 0.10, 0.10
+            pos_hint: {"x":0.035, "top":1} 
+        # BoxLayout:
+        #name: 'box'
         Button:
             text: 'Stop Test'
-            background_color: 1, 131.0/255, 164.0/255, 0.1
-            pos_hint: {"x":0.4, "top":0.2} 
-            size_hint: 0.2, 0.2
+            font_size: "18sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.23, "top":0.1} 
+            size_hint: 0.4, 0.08
             on_press:
                 root.stopTest()
                 app.root.transition = SlideTransition()
                 app.root.current = 'finished'
                 app.root.transition = SlideTransition()
         Button:
-            text: 'Back to home'
-            background_color: 1, 131.0/255, 164.0/255, 0.7
-            pos_hint: {"x":0.7, "top":0.1} 
-            size_hint: 0.2, 0.1
+            text: 'Back'
+            font_size: "18sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.70, "top":0.1} 
+            size_hint: 0.2, 0.08
             on_press:
                 app.root.transition.direction = 'right'
-                app.root.current = 'home'
+                app.root.current = 'test'
 
 
 
@@ -218,13 +248,20 @@ ScreenManager:
                 rgba: 230.0/255, 131.0/255, 150.0/255, 0.6
             Rectangle:
                 size: 600, 115
-                pos: 90, 70
-
+                pos: 0, 92
+        Image:
+            source: 'new_logo.png'
+            size: self.texture_size
+            size_hint: 0.7 * 0.85 , 0.2 * 0.85
+            pos_hint: {"x":0.3, "top":1} 
+        Image:
+            source: 'user.png'
+            size_hint: 0.15, 0.15
+            pos_hint: {"x":0.035, "top":1} 
         Image:
             source: 'map.png'
-            #size: self.texture_size
             size_hint: 0.94, 0.55
-            pos_hint: {"x":0.02, "top":0.90} 
+            pos_hint: {"x":0.02, "top":0.8} 
         Button:
             text: 'Back'
             font_size: "18sp"
@@ -238,14 +275,14 @@ ScreenManager:
         Label:
             id: "clinics_label"
             text: "Nearby Clinics"
-            pos_hint: {"x":0.4, "top":0.97} 
+            pos_hint: {"x":0.4, "top":0.75} 
             size_hint: 0.2, 0.03
-            font_size: "30sp"
+            font_size: "34sp"
         Label:
             id: "example_clinic_name_label"
             color: 0, 0, 1, 1
             text: '[Example Clinic]'
-            pos_hint: {"x":0.12, "top":0.30} 
+            pos_hint: {"x":0.09, "top":0.29} 
             size_hint: 0.2, 0.03
             font_size: "18sp"
         Label:
@@ -258,19 +295,197 @@ ScreenManager:
         
 # Finished Test Screen
 <FinishedTestScreen>:
-    BoxLayout:
+    FloatLayout:
+        Image:
+            source: 'new_logo.png'
+            size: self.texture_size
+            size_hint: 0.7 * 0.85 , 0.2 * 0.85
+            pos_hint: {"x":0.3, "top":1} 
+        Image:
+            source: 'user.png'
+            size_hint: 0.15, 0.15
+            pos_hint: {"x":0.035, "top":1} 
         Label:
             id: "title_label"
             text: "Summary"
-            pos_hint: {"x":0.6, "top":0.95} 
+            pos_hint: {"x":0.15, "top":0.80}
+            size_hint: 0.2, 0.03
+            font_size: "38sp"
+        Label:
+            id: "text2_label"
+            text: "April 21st, 2020\n"
+            pos_hint: {"x":0.2, "top":0.72}
+            size_hint: 0.2, 0.03
             font_size: "30sp"
+        Image:
+            source: 'color_labels.png'
+            size_hint: 0.09, 0.09
+            pos_hint: {"x":0.035, "top":0.39} 
+        Label:
+            markup: True
+            text: "[color=000000]Successful 'Hard Touch'[/color]"
+            pos_hint: {"x":0.22, "top":0.38}
+            size_hint: 0.2, 0.03
+            font_size: "16sp"
+        Label:
+            markup: True
+            text: "[color=000000]Missed Spot[/color]"
+            pos_hint: {"x":0.125, "top":0.34}
+            size_hint: 0.2, 0.03
+            font_size: "16sp"
+        Label:
+            text: "Notes"
+            pos_hint: {"x":0.095, "top":0.30}
+            size_hint: 0.2, 0.03
+            font_size: "28sp"
+        TextInput:
+            id: journal_input
+            text: "Add notes..."
+            multiline: True
+            focus: True
+            pos_hint: {"x":0.1, "top":0.265}
+            size_hint: 0.8, 0.15
         Button:
-            text: 'Back to home'
-            background_color: 1, 131.0/255, 164.0/255, 0.7
-            pos_hint: {"x":0.7, "top":0.1} 
+            text: 'Back'
+            font_size: "18sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.70, "top":0.1} 
+            size_hint: 0.2, 0.08
+            on_press:
+                app.root.transition.direction = 'right'
+                app.root.current = 'test'
+        Button:
+            text: 'Save to Journal'
+            font_size: "18sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.23, "top":0.1} 
+            size_hint: 0.4, 0.08
+            on_press:
+                root.saveToJournal()
+                app.root.transition.direction = 'right'
+                app.root.current = 'test'
+# Journal Screen
+<JournalScreen>:
+    FloatLayout:
+        Image:
+            source: 'new_logo.png'
+            size: self.texture_size
+            size_hint: 0.7 * 0.85 , 0.2 * 0.85
+            pos_hint: {"x":0.3, "top":1} 
+        Image:
+            source: 'user.png'
+            size_hint: 0.15, 0.15
+            pos_hint: {"x":0.035, "top":1} 
+        Label:
+            id: "title_label"
+            text: "My Journal"
+            pos_hint: {"x":0.15, "top":0.80}
+            size_hint: 0.2, 0.03
+            font_size: "38sp"
+        Button:
+            text: 'Back'
+            font_size: "18sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.78, "top":0.11} 
             size_hint: 0.2, 0.1
             on_press:
                 app.root.transition.direction = 'right'
-                app.root.current = 'home'
-        
+                app.root.current = 'test'
+        BoxLayout: # entries
+            orientation: 'vertical'
+            pos_hint: {"x":0.05, "top":0.75} 
+            size_hint: 0.9, 0.6
+            Button:
+                font_size: "18sp"
+                background_normal: ''
+                background_color: [1,64/255,83/255,1]
+                text: "March 28, 2020"
+                borders: [1,1,0,1]
+            Button:
+                font_size: "18sp"
+                background_normal: ''
+                background_color: [1,64/255,83/255,1]
+                text: "April 7, 2020"
+            Button:
+                font_size: "18sp"
+                background_normal: ''
+                background_color: [1,64/255,83/255,1]
+                text: "April 15, 2020"
+            #################################
+            # FIXME This is for the demo
+            Button:
+                font_size: "18sp"
+                background_normal: ''
+                background_color: [1,64/255,83/255,1]
+                text: "April 21, 2020"
+                on_press:
+                    app.root.transition.direction = 'left'
+                    app.root.current = 'fake_entry'
+
+<FakeEntryScreen>:
+    FloatLayout:
+        Image:
+            source: 'new_logo.png'
+            size: self.texture_size
+            size_hint: 0.7 * 0.85 , 0.2 * 0.85
+            pos_hint: {"x":0.3, "top":1} 
+        Image:
+            source: 'user.png'
+            size_hint: 0.15, 0.15
+            pos_hint: {"x":0.035, "top":1}
+
+        Label:
+            id: "title_label"
+            text: "My Journal"
+            pos_hint: {"x":0.18, "top":0.80}
+            size_hint: 0.2, 0.03
+            font_size: "38sp"
+        Label:
+            id: "text2_label"
+            text: "April 21st, 2020\n"
+            pos_hint: {"x":0.2, "top":0.72}
+            size_hint: 0.2, 0.03
+            font_size: "30sp"
+        Image:
+            source: 'color_labels.png'
+            size_hint: 0.09, 0.09
+            pos_hint: {"x":0.035, "top":0.39} 
+        Label:
+            markup: True
+            text: "[color=000000]Successful 'Hard Touch'[/color]"
+            pos_hint: {"x":0.22, "top":0.38}
+            size_hint: 0.2, 0.03
+            font_size: "16sp"
+        Label:
+            markup: True
+            text: "[color=000000]Missed Spot[/color]"
+            pos_hint: {"x":0.125, "top":0.34}
+            size_hint: 0.2, 0.03
+            font_size: "16sp"
+        Label:
+            text: "Notes"
+            pos_hint: {"x":0.095, "top":0.30}
+            size_hint: 0.2, 0.03
+            font_size: "28sp"
+        Label:
+            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nPraesent eu sagittis libero. Donec eget sapien vitae lectus \nvestibulum fermentum cursus a ipsum. Curabitur dolor urna, \nvulputate in mauris rutrum, dapibus pharetra dui. Nam et \npurus sed metus fermentum dignissim."
+            pos_hint: {"x":0.45, "top":0.20}
+            size_hint: 0.2, 0.03
+            font_size: "14sp"
+        Button:
+            text: 'Back'
+            font_size: "18sp"
+            background_normal: ''
+            background_color: [1,64/255,83/255,1]
+            pos_hint: {"x":0.78, "top":0.11} 
+            size_hint: 0.2, 0.1
+            on_press:
+                app.root.transition.direction = 'right'
+                app.root.current = 'journal'
+
+
+
     

@@ -1,3 +1,4 @@
+import PDHsettings
 import kivy
 kivy.require('1.0.6')
 # Set window size
@@ -14,6 +15,7 @@ from kivy.uix.videoplayer import VideoPlayer
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.graphics import Color, Rectangle
+from kivy.uix.textinput import TextInput
 #from kivy.lib.gstplayer import GstPlayer
 
 import numpy as np
@@ -46,11 +48,14 @@ resultsc = colors = ['none']*72
 im = np.array(Image.open('bra.png'),dtype=np.uint8)
 fig, ax = plt.subplots()
 ax.imshow(im)
+fig.patch.set_facecolor('#ff8a96')
 
-pmap = ax.scatter(xs, ys, s=400,c=colors,zorder=5)
+pmap = ax.scatter(xs, ys, s=90,c=colors,zorder=5)
 fig = plt.gcf()
 
 Arduino = serial.Serial('COM9', 9600, timeout=0.5)
+
+
 
 ###################################################
 ###################################################
@@ -65,7 +70,7 @@ class TestScreen(Screen):
 
 class HowToScreen(Screen):
     def on_enter(self, *args):
-        video = VideoPlayer(source='Polka_Dot_App_demo.avi', state='play')
+        video = VideoPlayer(source='Tutorial_Video.mp4', state='play')
         self.add_widget(video)
     pass
 
@@ -81,18 +86,46 @@ class ActiveTestScreen(Screen):
         self.box.size_hint = 0.95, 0.7
         self.box.pos_hint = {"x":0.025, "top":0.9} 
         self.box.add_widget(self.bra_plot)
-        self.add_widget(self.box)
+        self.add_widget(self.box, 10)
         for j in range (0,20):
             for i in (mapindex):
-                    f = np.random.rand(1,1)*800
+                    f = np.random.rand(1,1)*100
                     colors[i] = colorbank[math.floor(f/100)]
                     #plt.pause(0.001)
             #time.sleep(1)
         pmap.set_color(colors)
-        Clock.schedule_interval(self.update_plot, 2) # calls update plot every 2 seconds
+        Clock.schedule_interval(self.update_plot, 0.7) # calls update plot every 2 seconds
     
     # Ideally here we will have the Arduino.read() and use that number to set colors[i]
     def update_plot(self, *args): 
+        self.box.remove_widget(self.bra_plot)
+        self.remove_widget(self.box)
+        box = BoxLayout()
+        box.size_hint = 0.95, 0.7
+        box.pos_hint = {"x":0.025, "top":0.9} 
+        box.add_widget(FigureCanvasKivyAgg(plt.gcf()))
+        self.add_widget(box)
+        for i in (mapindex):
+            # f = np.random.rand(1,1)*800
+            # colors[i] = colorbank[math.floor(f/100)]
+            if (self.stopTestCalled):
+                break
+            Arduino.write(bytes(str(i), 'utf-8'))
+            Arduino.write(b"\n")
+            while (not Arduino.inWaiting()):# continues if the arduino replies
+                pass
+            x = Arduino.readline() # maybe switch to Arduino.read(), 
+            y = x.decode() # if readline() is switched to read() this may not be necessary anymore
+            z = y.rstrip() # if readline() is switched to read() this may not be necessary anymore
+            f = math.floor(float(z))
+            #print(f)
+            if f>threshold:
+                checklist[i] = 1
+            colors[i] = colorbank[math.floor(f/100)]
+        pmap.set_color(colors)
+        #colors[i] = 'gainsboro'
+    def update_plot_demo(self, *args): 
+        print("UPDATEPLOT CALLED")
         self.box.remove_widget(self.bra_plot)
         self.remove_widget(self.box)
         box = BoxLayout()
@@ -106,17 +139,10 @@ class ActiveTestScreen(Screen):
             # colors[i] = colorbank[math.floor(f/100)]
             if (self.stopTestCalled):
                 break
-            Arduino.write(bytes(str(j), 'utf-8'))
-            Arduino.write(b"\n")
-            while (not Arduino.inWaiting()):# continues if the arduino replies
-                pass
-            x = Arduino.readline() # maybe switch to Arduino.read(), 
-            y = x.decode() # if readline() is switched to read() this may not be necessary anymore
-            z = y.rstrip() # if readline() is switched to read() this may not be necessary anymore
-            f = math.floor(float(z))
-            print(f)
+            f = 800
             if f>threshold:
                 checklist[i] = 1
+            colors = ['gainsboro']*72
             colors[i] = colorbank[math.floor(f/100)]
             j += 1
         pmap.set_color(colors)
@@ -133,18 +159,39 @@ class ActiveTestScreen(Screen):
     pass
 
 class FinishedTestScreen(Screen):
-    
     def on_enter(self, *args):
         fig, bx = plt.subplots()
+        fig.patch.set_facecolor('#ff8a96')
         bx.imshow(im)
-        results = bx.scatter(xs, ys, s = 400, c=resultsc)
+        results = bx.scatter(xs, ys, s = 90, c=resultsc)
         box = BoxLayout()
         box.size_hint = 0.95, 0.7
         box.pos_hint = {"x":0.025, "top":0.9}
         finished_plot = FigureCanvasKivyAgg(plt.gcf()) # gets current figure
         box.add_widget(finished_plot)
-        self.add_widget(box)
+        self.add_widget(box, 10)
     
+    def saveToJournal(self, *args): # TODO !!!!!!!
+        journal_notes = self.ids.journal_input.text
+        print (journal_notes)
+        return
+    pass
+
+class JournalScreen(Screen):
+    pass
+
+class FakeEntryScreen(Screen):
+    def on_enter(self, *args):
+        fig, bx = plt.subplots()
+        fig.patch.set_facecolor('#ff8a96')
+        bx.imshow(im)
+        results = bx.scatter(xs, ys, s = 90, c=resultsc)
+        box = BoxLayout()
+        box.size_hint = 0.95, 0.7
+        box.pos_hint = {"x":0.025, "top":0.9}
+        finished_plot = FigureCanvasKivyAgg(plt.gcf()) # gets current figure
+        box.add_widget(finished_plot)
+        self.add_widget(box, 10)
     pass
 
 class SerialButton(Widget):

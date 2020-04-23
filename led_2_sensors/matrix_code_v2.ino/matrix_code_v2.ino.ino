@@ -28,7 +28,7 @@ void loop() {
     // if you get a newline, print the string, then the string's value:
     if (a == '\n') {
       if (sensor.toInt() > fullCycles) {
-        Serial.println(random(200));
+        Serial.println(random(50,200));
       }
       else {
         Serial.println(800);
